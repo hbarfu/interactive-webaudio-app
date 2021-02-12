@@ -5,6 +5,7 @@
 *.mp4*
 *.m4v*
 *.mp3*
+*.wav*
 
 test.php
 Mobile_Detect.php
