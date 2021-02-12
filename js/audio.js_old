@@ -1,0 +1,196 @@
+var context = undefined;
+var master = undefined;
+var currentTrack = undefined;
+var mute = false;
+
+var audioQueue = [];
+
+var Track = function() {
+	this.currentClip = undefined; //AudioBufferSourceNode
+	this.playing = false;
+	this.tracklist = [];
+	this.transition = function() {
+
+	}
+	this.play = function() {
+
+	}
+	this.pause = function() {
+
+	}
+
+}
+
+var audio_init = function() {
+	var AudioContext = window.AudioContext          // Default
+	              || window.webkitAudioContext;  // Safari and old versions of Chrome
+	context = new AudioContext(),
+	masterGain = context.createGain(),
+	master = masterGain;
+	master.connect(context.destination);
+
+	notification_sound = context.createMediaElementSource(document.getElementById("audio-chat-notification"));
+	notification_sound.connect(master);
+}
+
+var timeUntilTransitionPoint = function() {
+	/*elapsed = context.currentTime - currentTrack.started;
+	if ( currentTrack.loopStart != undefined ) elapsed += currentTrack.loopStart;
+	remaining = currentTrack.node.buffer.duration - elapsed;*/
+
+	t0 = currentTrack.started;
+	t1 = context.currentTime;
+	td = t1 - t0;
+
+	d = currentTrack.node.buffer.duration;
+
+	tr = ( Math.floor(td / d) + 1 ) * d - td;
+
+	console.log(tr);
+
+	return tr;
+}
+
+//preload audio files and specify what happens when loading complete in callback.
+var loadFiles = function(ts, callback) {
+	var request = audiorequest(ts).then(function() {
+		callback(ts);
+	});
+}
+
+var playOrQueue = function(ts, startTime) {
+	if(ts.length == 0) return;
+
+	t = ts.splice(0, 1)[0];
+	
+	/* find out how much time until the currently playing loop is ended */
+	time = startTime || context.currentTime + timeUntilTransitionPoint();
+
+	t.node.connect(master);
+	if( t.loop != undefined ) {
+		t.node.loop = true;
+		t.node.loopStart = 0.0;
+		t.node.loopEnd = t.node.buffer.duration;
+	}
+
+	d = t.node.buffer.duration;
+
+	t.node.start(time);
+	t.node.stop(time + d);
+
+	audioQueue.push({t, time});
+
+	playOrQueue(ts, time + d);
+
+}
+
+var transition = function() {
+	if ( currentTrack == undefined )  {
+		return;
+	}
+
+	requestedTracks = [];
+	ptr = tracks.indexOf( currentTrack ) + 1;
+	//push all transitions to queue
+	while( ptr < tracks.length && tracks[ptr].autotransition ) {
+		requestedTracks.push( tracks[ptr] );
+		ptr++;
+	}
+	//push one loopable to queue
+	if( ptr < tracks.length ) requestedTracks.push( tracks[ptr] );
+
+	if(requestedTracks.length == 0) {
+		console.error("no more track objects found.");
+		return;
+	}
+
+	loadFiles(requestedTracks, playOrQueue);
+}
+
+var playFile = function(tracks) {
+	var request = audiorequest(tracks).then(function() {
+		for(track of tracks) {
+			track.node.connect(master);
+			if( track.loop != undefined ) {
+				track.node.loop = true;
+				track.node.loopStart = 0.0;
+				track.node.loopEnd = track.node.buffer.duration;
+			}
+			track.node.start(context.currentTime, track.node.loopStart);
+			currentTrack = track;
+			track.started = context.currentTime;
+		}
+	});
+}
+
+var muteAudio = function() {
+	master.gain.linearRampToValueAtTime(0, context.currentTime);
+	mute = true;
+}
+
+var unmuteAudio = function() {
+	master.gain.linearRampToValueAtTime(1, context.currentTime);
+	mute = false;
+}
+
+var transitionToTrack = function(track) {
+	var request = audiorequest( [track] ).then(function() {
+		track.node.connect(master);
+		currentTrack.node.loop = false;
+		elapsed = context.currentTime - currentTrack.started + currentTrack.loopStart;
+		remaining = currentTrack.node.buffer.duration - elapsed;
+		console.log(remaining);
+		currentTrack.node.stop(context.currentTime + remaining);
+		track.node.start(context.currentTime + remaining);
+		console.log("transition ended");
+	});
+}
+
+tracklist_music = [
+	{
+		file: "t0.wav",
+		loop:true,
+		node:undefined,
+		started: undefined,
+		autotransition: false
+	},
+	{
+		file: "t0_1.wav",
+		node:undefined,
+		started: undefined,
+		autotransition: false,
+		loop: true
+	},
+	{
+		file: "t1.wav",
+		loop:true,
+		node:undefined,
+		autotransition: false
+	}
+];
+
+/* tracks */
+tracks_base_path = "audio/music/";
+
+tracks = [
+	{
+		file: "t0.wav",
+		loop:true,
+		node:undefined,
+		started: undefined,
+		autotransition: false
+	},
+	{
+		file: "t0_1.wav",
+		node:undefined,
+		started: undefined,
+		autotransition: false,
+		loop: true
+	},
+	{
+		file: "t1.wav",
+		loop:true,
+		node:undefined,
+		autotransition: false
+	},
+];

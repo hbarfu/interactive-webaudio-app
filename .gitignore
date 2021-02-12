@@ -1,0 +1,10 @@
+*.DS_Store*
+
+*.htaccess*
+
+*.mp4*
+*.m4v*
+*.mp3*
+
+test.php
+Mobile_Detect.php

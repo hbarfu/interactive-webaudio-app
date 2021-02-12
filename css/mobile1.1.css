@@ -1,0 +1,224 @@
+/*author: HB 2020*/
+
+:root {
+	--island-ratio: 0.5625;
+		--freddy-map-position-1-left: 26%;
+	--freddy-map-position-1-top: 102%;
+		--freddy-map-position-2-left: 26%;
+	--freddy-map-position-2-top: 102%;
+		--freddy-map-position-3-left: 12%;
+	--freddy-map-position-3-top: 56%;
+		--freddy-map-position-4-left: 37%;
+	--freddy-map-position-4-top: 142%;
+		--freddy-map-position-5-left: 57%;
+	--freddy-map-position-5-top: 116%;
+		--freddy-map-position-6-left: 67%;
+	--freddy-map-position-6-top: 53%;
+		--freddy-map-position-7-left: 76%;
+	--freddy-map-position-7-top: 54%;
+}
+
+
+
+html {
+	font-size: 3rem;
+}
+
+@media screen and (orientation: landscape) {
+	html {
+		font-size: 1.6rem;
+	}
+}
+
+#collapse-horizontal {
+	width: 1em;
+	height: 1em;
+	transform: translateY(0.17em);
+}
+
+#impressum-button {
+	position:fixed;
+	top:0.5em;
+	right:0.5em;
+	cursor:pointer;
+}
+
+#impressum-button img {
+	max-height: 1em;
+}
+
+#impressum {
+	font-size: 0.5rem;
+}
+
+#chatwindow {
+	position:absolute;
+	bottom:0;
+	right: 0;
+	top:0;
+	height: 100%;
+	width: 100%;
+	transition: transform 0.5s ease;
+	z-index: 99;
+}
+
+
+	#freddy-mapicon {
+		max-width: 2em;
+		max-height: 2em;
+	}
+
+@media (orientation: landscape) {
+	/*#chatwindow {
+		position:absolute;
+		bottom:0;
+		right: 0;
+		top:0;
+		height: 100%;
+		width: 25vw;
+		min-width: 400px;
+		max-width: 100%;
+		transition: transform 0.5s ease;
+	}
+
+	.chat-closed {
+		transform: translateX(var(--c-closed-offset));
+	}
+	.chat-open {
+		transform: translateX(0px);
+	}*/
+	#chatwindow {
+		position:absolute;
+		right: 0;
+		top:0;
+		height: 100%;
+		width: 50%;
+		transition: transform 0.5s ease;
+		z-index: 99;
+	}
+
+	#freddy-mapicon {
+		max-width: 3.5em;
+		max-height: 3.5em;
+	}
+}
+
+#island {
+	background-image: url('../img/map/island_m.png');
+}
+#fog {
+	background-image: url('../img/map/fog_m.png');
+}
+
+#social {
+	top:0;
+	left:0;
+}
+
+#volume-icon {
+	display: none;
+}
+
+#social img {
+	display: block;
+}
+
+#chatsidebar {
+	display: none;
+}
+
+#chatheader {
+	cursor: pointer;
+}
+
+#chatresize {
+	position: relative;
+	right: 0.25em;
+}
+
+
+.chat-closed {
+	transform: translateY(var(--c-closed-offset));
+}
+.chat-open {
+	transform: translateY(0px);
+}
+
+.islandsize {
+	margin: 0em;
+	height: calc(100vh - 4em);
+	width: calc( (100vh - 4em) * var(--island-ratio) );
+	margin-left: calc( ( 100vw - ( (100vh - 4em) * var(--island-ratio) ) ) / 2 );
+	position: absolute;
+}
+
+#cam1 {
+	transform: rotate(160deg) scale(3);
+	margin-left: 25%;
+	margin-top: 57%;
+	display: none;
+}
+#cam2 {
+	transform: rotate(27deg) scale(3);
+	margin-left: 13%;
+	margin-top: 103%;
+}
+#cam3 {
+	transform: rotate(160deg) scale(3);
+	margin-left: 41.5%;
+	margin-top: 113%;
+}
+#cam4 {
+	transform: rotate(156deg) scale(3);
+	margin-left: 77%;
+	margin-top: 120%;
+	display:none;
+}
+#cam5 {
+	transform:  rotate(10deg) scale(3);
+	margin-left: 64%;
+	margin-top: 60%;
+	display:none;
+}
+#cam6 {
+	transform: rotate(22deg) scale(3);
+	margin-left: 74%;
+	margin-top: 19%;
+	display:none;
+}
+#cam7 {
+	transform: rotate(77deg) scale(3);
+	margin-left: 80%;
+	margin-top: 40%;
+	display:none;
+}
+#cam8 {
+	transform: rotate(150deg) scale(3);
+	margin-left: 48%;
+	margin-top: 146%;
+	display:none;
+}
+
+#loadcircle {
+	right:0;
+	top:1em;
+}
+
+#volume-control {
+	display: none;
+}
+
+@media (max-aspect-ratio: 11/20) {
+  .islandsize {
+    width: calc(100vw - 2em);
+	height: calc( (100vw - 2em) * ( 1 / var(--island-ratio) ) );
+  }
+}
+
+@media screen and (orientation: landscape) {
+	.islandsize {
+		height: calc( 100vw * (1 / var(--island-ratio)) );
+		width: 100vw;
+		margin-left: 0;
+	}
+}

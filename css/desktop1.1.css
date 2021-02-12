@@ -1,0 +1,81 @@
+/*author: HB 2020*/
+
+:root {
+	--island-ratio: 1.605204460966543;
+}
+
+html {
+	font-size: 1.3rem;
+}
+
+#chatwindow {
+	position:absolute;
+	bottom:0;
+	right: 0;
+	top:0;
+	height: 100%;
+	width: 25vw;
+	min-width: 400px;
+	max-width: 100%;
+	transition: transform 0.5s ease;
+
+}
+
+#social {
+	bottom:0;
+	left:0;
+}
+
+
+#collapse-horizontal {
+	display: none;
+}
+
+
+.chat-closed {
+	transform: translateX(var(--c-closed-offset));
+}
+.chat-open {
+	transform: translateX(0px);
+}
+
+#loadcircle {
+	left:0;
+}
+
+.islandsize {
+	margin: 1em;
+	width: calc(100vw - 2em);
+	height: calc( (100vw - 2em) * ( 1 / var(--island-ratio) ) );
+	position: absolute;
+	transform: translateY(-5%) scale(1.3);
+}
+
+@media (min-aspect-ratio: 8/5) {
+  .islandsize {
+    height: calc(100vh - 2em);
+	width: calc( (100vh - 2em) * var(--island-ratio) );
+  }
+}
+
+#chat-newmsg {
+	transform: translateX(-1.8em);
+	z-index: 100;
+}
+
+#impressum-button {
+	height: 1.5em;
+	margin-bottom: 1em;
+}
+
+/*#chatfooter {
+	width: calc(100% + 23px);
+	transform: translatex(-23px);
+	z-index: 100000;
+}
+
+#chatheader {
+	width: calc(100% + 23px);
+	transform: translatex(-23px);
+	z-index: 100000;
+}*/
